@@ -85,10 +85,6 @@ export class MyHomeNavigator extends Component {
 
 export default class MyHome extends Component {
 
-  convert_percentage(count, total) {
-    return Math.round(((count / total) * 100)) + '%';
-  };
-
   onPressListItem() {
     AlertIOS.alert(
      'ListItemClicked',
