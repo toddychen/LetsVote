@@ -2,9 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { Icon, Left, Right, Body, Text, Button, Header, Title, Item,Input } from 'native-base';
 
 
-export class SmartHeader extends Component {
+export default class SmartHeader extends Component {
   state = {
     searchMode: false,
+    searchText: '',
   };
 
   selectSearchMode = () => {
@@ -38,7 +39,14 @@ export class SmartHeader extends Component {
         <Header searchBar rounded>
           <Item>
               <Icon name="search" />
-              <Input placeholder="Search" />
+              <Input
+                placeholder="Search"
+                onChangeText={(text) => {
+                  this.setState({searchText:text});
+                  this.props.onSearchTextChange(text);
+                }}
+                autoCapitalize='none'
+              />
               <Icon active name="archive" />
           </Item>
           <Button transparent onPress={this.cancelSearchMode}>

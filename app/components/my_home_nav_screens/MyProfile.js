@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { View, SegmentedControlIOS, TextInput, DatePickerIOS, TouchableHighlight, AlertIOS, Text, Image, ImagePickerIOS, TouchableOpacity } from 'react-native';
-import { Container, Icon, DeckSwiper, Card, CardItem, Left, Right, Body, Thumbnail, H2, Input, Content, Form, Item, Label, Button, Badge } from 'native-base';
-import Mystyles from '../styles/Mystyles'
-import {SmartHeader} from './SmartHeader'
+import { View, AlertIOS, Text, Image, ImagePickerIOS, TouchableOpacity, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { Container, Content, Label, Button, Badge } from 'native-base';
 import TagInput from 'react-native-tag-input';
-import DataController from '../utils/DataController'
+import Toast from 'react-native-simple-toast';
+
+import Mystyles from '../../../styles/Mystyles'
+import SmartHeader from '../utils/SmartHeader'
+import DataController from '../../../utils/DataController'
+
+const dismissKeyboard = require('dismissKeyboard')
 
 export default class MyProfile extends Component {
   state = {
@@ -37,7 +41,7 @@ export default class MyProfile extends Component {
     // openSelectDialog(config, successCallback, errorCallback);
     ImagePickerIOS.openSelectDialog({}, imageUri => {
       this.setState({ new_profile_image: imageUri });
-    }, error => console.error(error));
+    }, () => console.log('Did not pick an image.'));
   };
 
   _onImagePickerPress = () => {
@@ -53,17 +57,13 @@ export default class MyProfile extends Component {
         'profile',
         (filename) => {
           this.setState({ existing_profile_image: filename }, ()=>{
-            AlertIOS.alert(
-              'My Profile',
-              'id: ' + this.state.id + ', ' +
-              'tags: ' + this.state.tags.join(', ') + ', ' +
-              'existing_profile_image: ' + this.state.existing_profile_image
-            );
+            //this.alertProfileData();
             // make the dc call to update the user
             dc.updateUser({
               id: this.state.id,
               tags: this.state.tags,
-            })
+            });
+            Toast.show('Profile updated successfully!');
           })
         }
       );
@@ -71,7 +71,8 @@ export default class MyProfile extends Component {
       dc.updateUser({
         id: this.state.id,
         tags: this.state.tags,
-      })
+      });
+      Toast.show('Profile updated successfully!');
     }
   };
 
@@ -80,19 +81,26 @@ export default class MyProfile extends Component {
     this.setState({ tags: tags });
   };
 
+  alertProfileData = () => {
+    AlertIOS.alert(
+      'My Profile',
+      'id: ' + this.state.id + ', ' +
+      'tags: ' + this.state.tags.join(', ') + ', ' +
+      'existing_profile_image: ' + this.state.existing_profile_image
+    );
+  };
 
   render(){
     const badgesRendered = this.state.badges.map((badge) => {
       return (
         <Badge key={badge} warning>
-          <Text style={Mystyles.badge_label}>
+          <Text style={Mystyles.ss.badge_label}>
             {badge}
           </Text>
         </Badge>
       )
     })
 
-    console.log('In render tags: ', this.state.tags)
     return (
      <Container>
       <SmartHeader
@@ -100,28 +108,29 @@ export default class MyProfile extends Component {
         leftButtonIconName='arrow-back'
         title="My Profile"
       />
-
-      <View style={Mystyles.profile_top_view}>
-        <View style={{ flex: 3, marginBottom: 8}}>
-        {this.state.new_profile_image?
-          <Image style={{ height: 120, width: 120 }} source={{ uri: this.state.new_profile_image }} /> :
-          <Image style={{ height: 120, width: 120 }} source={{ uri: DataController.HOST + '/image/' + this.state.existing_profile_image}} />
-        }
-        <TouchableOpacity
-          onPress={this._onImagePickerPress}>
-          <Text style={{ paddingTop: 16, color:'blue' }}>Change Profile Image</Text>
-        </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
+        <View style={Mystyles.ss.profile_top_view}>
+          <View style={{ flex: 3, marginBottom: 8}}>
+          {this.state.new_profile_image?
+            <Image style={{ height: 120, width: 120 }} source={{ uri: this.state.new_profile_image }} /> :
+            <Image style={{ height: 120, width: 120 }} source={{ uri: DataController.HOST + '/image/' + this.state.existing_profile_image}} />
+          }
+          <TouchableOpacity
+            onPress={this._onImagePickerPress}>
+            <Text style={{ paddingTop: 16, color:'blue' }}>Change Profile Image</Text>
+          </TouchableOpacity>
+          </View>
+          <View style={{ flex: 2 }}>
+            <Label>Vote ID:</Label>
+            <Label>{this.state.id}</Label>
+            <View style={{marginTop: 8}}>
+              {badgesRendered}
+            </View>
+          </View>
         </View>
-        <View style={{ flex: 2 }}>
-          <Label>Vote ID:</Label>
-          <Label>{this.state.id}</Label>
-          <Content style={{marginTop: 8}}>
-            {badgesRendered}
-          </Content>
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
 
-      <View style={Mystyles.profile_tags_view} >
+      <View style={Mystyles.ss.profile_tags_view} >
         <Label>Tags</Label>
         <TagInput
           value={this.state.tags}
@@ -129,8 +138,9 @@ export default class MyProfile extends Component {
           numberOfLines={6}
           tagColor="darkturquoise"
           tagTextColor="white"
-          inputProps={{ keyboardType: 'default', placeholder: 'email', autoFocus: true }}
+          inputProps={{ keyboardType: 'default', placeholder: 'Type more tags here.', autoFocus: false, }}
           tagContainerStyle={{ borderRadius: 5 }}
+          separators={[',']}
         />
       </View>
 

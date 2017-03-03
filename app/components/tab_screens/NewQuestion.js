@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { View, SegmentedControlIOS, TextInput, DatePickerIOS, TouchableHighlight, AlertIOS, Text, Image, ImagePickerIOS, TouchableOpacity } from 'react-native';
-import { Container, Icon, DeckSwiper, Card, CardItem, Left, Right, Body, Thumbnail, H2, Input, Content, Form, Item, Label, Button } from 'native-base';
-import Mystyles from '../styles/Mystyles'
-import {SmartHeader} from './SmartHeader'
-import DataController from '../utils/DataController'
+import { View, AlertIOS, Text, Image, ImagePickerIOS, TouchableOpacity } from 'react-native';
+import { Container, Icon, Body, Input, Content, Form, Item, Label, Button } from 'native-base';
+import Toast from 'react-native-simple-toast';
+
+import Mystyles from '../../../styles/Mystyles'
+import SmartHeader from '../utils/SmartHeader'
+import DataController from '../../../utils/DataController'
+
 
 export default class NewQuestion extends Component {
   state = {
@@ -21,7 +24,7 @@ export default class NewQuestion extends Component {
     // openSelectDialog(config, successCallback, errorCallback);
     ImagePickerIOS.openSelectDialog({}, imageUri => {
       this.setState({ new_image: imageUri });
-    }, error => console.error(error));
+    }, () => console.log('Did not pick an image.'));
   };
 
   _onImagePickerPress = () => {
@@ -37,15 +40,7 @@ export default class NewQuestion extends Component {
         'survey',
         (filename) => {
           this.setState({ image: filename }, ()=>{
-            AlertIOS.alert(
-              'My Profile',
-              'question: ' + this.state.question + ', ' +
-              'tags: ' + this.state.tags.join(', ') + ', ' +
-              'body: ' + this.state.body + ', ' +
-              'option_left: ' + this.state.option_left + ', ' +
-              'option_right: ' + this.state.option_right + ', ' +
-              'image: ' + this.state.image + ', '
-            );
+            //this.alertComposeData();
             // make the dc call to update the user
             let filenameArray = filename.split('.')[0].split('_');
             let id = filenameArray[filenameArray.length-1];
@@ -58,7 +53,8 @@ export default class NewQuestion extends Component {
               count_left: 0,
               count_right: 0,
               image: this.state.image,
-            })
+            });
+            Toast.show('Survey created successfully!');
           })
         }
       );
@@ -72,22 +68,22 @@ export default class NewQuestion extends Component {
         count_left: 0,
         count_right: 0,
         image: '',
-      })
+      });
+      Toast.show('Survey created successfully without image!');
     }
+  };
 
-    /*
+  alertComposeData = () => {
     AlertIOS.alert(
-      'Your Survey',
+      'My Profile',
       'question: ' + this.state.question + ', ' +
       'tags: ' + this.state.tags.join(', ') + ', ' +
       'body: ' + this.state.body + ', ' +
       'option_left: ' + this.state.option_left + ', ' +
       'option_right: ' + this.state.option_right + ', ' +
-      'image: ' + ', '
+      'image: ' + this.state.image + ', '
     );
-    */
   };
-
 
   render(){
     return (
@@ -104,6 +100,7 @@ export default class NewQuestion extends Component {
             <Input
               style={{height:25}}
               onChangeText={(text) => this.setState({question:text})}
+              autoCapitalize='none'
             />
           </Item>
           <Item stackedLabel underline>
@@ -111,6 +108,7 @@ export default class NewQuestion extends Component {
             <Input
               style={{height:25, fontSize: 14}}
               onChangeText={(text) => this.setState({tags:text.split(',')})}
+              autoCapitalize='none'
             />
           </Item>
           <Item underline>
@@ -121,6 +119,7 @@ export default class NewQuestion extends Component {
               multiline={true}
               numberOfLines={3}
               onChangeText={(text) => this.setState({body:text})}
+              autoCapitalize='none'
             />
           </Item>
           <Item underline>
@@ -129,12 +128,14 @@ export default class NewQuestion extends Component {
               placeholder='Answer A'
               style={{fontSize: 14}}
               onChangeText={(text) => this.setState({option_left:text})}
+              autoCapitalize='none'
             />
             <Icon name="arrow-dropright-circle" style={{ color: '#ED4A6A', paddingLeft: 12}} />
             <Input
               placeholder='Answer B'
               style={{fontSize: 14}}
               onChangeText={(text) => this.setState({option_right:text})}
+              autoCapitalize='none'
             />
           </Item>
           <View style={{ flex: 1, padding: 16 }}>
@@ -143,7 +144,7 @@ export default class NewQuestion extends Component {
               <Text style={{ paddingBottom: 16, color:'blue' }}>Select Image (Optional)</Text>
             </TouchableOpacity>
             {this.state.new_image?
-              <Image style={{ height: 180 }} source={{ uri: this.state.new_image }} /> :
+              <Image style={{ height: 240 }} source={{ uri: this.state.new_image }} /> :
               null
             }
           </View>

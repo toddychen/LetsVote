@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { View, SegmentedControlIOS, TextInput, DatePickerIOS, TouchableHighlight, AlertIOS, Text, Image } from 'react-native';
-import { Container, Icon, DeckSwiper, Card, CardItem, Left, Right, Body, Thumbnail, H2, Button } from 'native-base';
-import Mystyles from '../styles/Mystyles'
-import {SmartHeader} from './SmartHeader'
-import DataController from '../utils/DataController'
+import { View, AlertIOS, Text, Image } from 'react-native';
+import { Container, Icon, DeckSwiper, Card, CardItem, Body, Button } from 'native-base';
+import Toast from 'react-native-simple-toast';
+
+import Mystyles from '../../../styles/Mystyles'
+import SmartHeader from '../utils/SmartHeader'
+import DataController from '../../../utils/DataController'
 
 
 export default class CardsPage extends Component {
@@ -36,7 +38,7 @@ export default class CardsPage extends Component {
       vote: 'left',
       cardIndex: this._incrementIndex(this.state.cardIndex)
     }, ()=>{
-      this._alertSelection();
+      //this._alertSelection();
       this.vote();
     });
   };
@@ -46,7 +48,7 @@ export default class CardsPage extends Component {
       vote: 'right',
       cardIndex: this._incrementIndex(this.state.cardIndex)
     }, ()=>{
-      this._alertSelection();
+      //this._alertSelection();
       this.vote();
     });
   };
@@ -58,6 +60,10 @@ export default class CardsPage extends Component {
       survey_id: this.state.cards[this._previousIndex(this.state.cardIndex)].id,
       vote: this.state.vote
     });
+  };
+
+  onSkipButton = () => {
+    Toast.show('TODO: implement onSkipButton');
   };
 
   _previousIndex = (index) => {
@@ -85,7 +91,7 @@ export default class CardsPage extends Component {
 
   renderLoadingView = () => {
     return (
-      <View style={Mystyles.home_container}>
+      <View style={Mystyles.ss.home_container}>
         <Text>
           Loading surveys...
         </Text>
@@ -102,7 +108,10 @@ export default class CardsPage extends Component {
     return (
       <Container>
         <SmartHeader
-          onPressLeftButton={this.props.onLogOut}
+          onPressLeftButton={()=>{
+            console.log('In onPressLeftButton');
+            this.props.onLogOut();
+          }}
           leftButtonIconName='power'
           title='Lets Vote!'
         />
@@ -113,8 +122,8 @@ export default class CardsPage extends Component {
               <Card style={{ elevation: 3 }}>
                 <CardItem cardBody>
                   <Body>
-                    <Text style={Mystyles.card_question}>{item.question}</Text>
-                    <Text style={Mystyles.card_tags}>{item.tags.join(', ')}</Text>
+                    <Text style={Mystyles.ss.card_question}>{item.question}</Text>
+                    <Text style={Mystyles.ss.card_tags}>{item.tags.join(', ')}</Text>
                   </Body>
                 </CardItem>
                 <CardItem cardBody>
@@ -125,7 +134,7 @@ export default class CardsPage extends Component {
                   <Text>{item.option_left}</Text>
                   <Body></Body>
                   <Text>{item.option_right}</Text>
-                  <Icon name="arrow-dropright-circle" style={{ width: 55, fontSize: 50, color: '#ED4A6A', paddingLeft: 8}} />
+                  <Icon name="arrow-dropright-circle" style={{ width: 50, fontSize: 50, color: '#ED4A6A', paddingLeft: 8}} />
                 </CardItem>
               </Card>
             }
@@ -134,7 +143,9 @@ export default class CardsPage extends Component {
           />
         </View>
         <View style={{ paddingBottom: 30, flexDirection: 'row', justifyContent: 'center' }}>
-          <Button primary transparent>
+          <Button
+            primary transparent
+            onPress={this.onSkipButton}>
             <Icon name="close-circle" style={{fontSize: 50, color: 'dodgerblue' }}/>
           </Button>
         </View>

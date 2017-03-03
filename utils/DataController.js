@@ -108,4 +108,5 @@ export default class DataController {
 
 }
 
-DataController.HOST = 'http://localhost:3000';
+// DataController.HOST = 'http://localhost:3000';
+DataController.HOST = 'http://speedgreed.corp.ne1.yahoo.com:3000';

@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { View, SegmentedControlIOS, TextInput, DatePickerIOS, TouchableHighlight, AlertIOS, Image } from 'react-native';
 import { Container, Icon, DeckSwiper, Card, CardItem, Left, Right, Body, Thumbnail, H2, Content, List, ListItem, Text, Button } from 'native-base';
-import Mystyles from '../styles/Mystyles'
 import { Text as OriginalText } from 'react-native';
-import {SmartHeader} from './SmartHeader'
-import DataController from '../utils/DataController'
 import {Pie} from 'react-native-pathjs-charts'
+
+import Mystyles from '../../../styles/Mystyles'
+import SmartHeader from '../utils/SmartHeader'
+import DataController from '../../../utils/DataController'
 
 
 export default class Surveys extends Component {

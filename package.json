@@ -11,7 +11,11 @@
     "react": "~15.4.0",
     "react-native": "0.41.2",
     "react-native-pathjs-charts": "0.0.26",
+    "react-native-simple-toast": "0.0.5",
+    "react-native-swipe-cards": "^0.1.0",
+    "react-native-swipe-list-view": "^0.3.3",
     "react-native-tag-input": "0.0.14",
+    "react-timer-mixin": "^0.13.3",
     "shortid": "^2.2.6"
   },
   "devDependencies": {
