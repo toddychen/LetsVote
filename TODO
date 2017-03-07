@@ -1,0 +1,17 @@
+TODO and roadmap
+
+Front End:
+1) Login and Auth. (Yahoo, Google, FB, Twitter)
+2) Skip Button in 'Lets Vote' Page.
+3) Share Button on each Survey - eg. share on FB or Twitter.
+4) Show survey details when click on a survey in the swipe page. (eg. zoom-in, multiple images, text descriptions, links)
+
+Back End:
+1) Survey Search API - eg. blur search.
+2) Rich Survey Analytics API
+	- eg. return counts of votes before/after a certain time.
+	- eg. return counts of votes from user with a specific tag.
+
+Functionality:
+1) Match users based on their surveys and votes.
+	- "Great minds think alike"

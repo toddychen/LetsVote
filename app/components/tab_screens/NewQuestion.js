@@ -32,6 +32,26 @@ export default class NewQuestion extends Component {
   };
 
   _onSubmitPress = () => {
+    if (this.state.question.trim() == ''){
+      Toast.show('Please provide a question.');
+      return
+    };
+
+    if (this.state.tags.length == 0){
+      Toast.show('Please provide at least one tag.');
+      return
+    };
+
+    if (this.state.option_left.trim() == ''){
+      Toast.show('Please provide Answer A');
+      return
+    };
+
+    if (this.state.option_right.trim() == ''){
+      Toast.show('Please provide Answer B');
+      return
+    };
+
     var dc = new DataController()
     if (this.state.new_image) {
       dc.uploadImage(

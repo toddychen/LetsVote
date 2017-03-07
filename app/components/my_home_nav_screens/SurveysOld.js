@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Animated, View, AlertIOS, ListView } from 'react-native';
+import { Animated, View, AlertIOS } from 'react-native';
 import { Container, Card, CardItem, Left, Right, Body, Thumbnail, Content, List, ListItem, Text } from 'native-base';
 
 import Mystyles from '../../../styles/Mystyles'
@@ -7,19 +7,17 @@ import SmartHeader from '../utils/SmartHeader'
 import DataController from '../../../utils/DataController'
 
 import ComparisonBar from '../utils/ComparisonBar'
-import ComparisonBar2 from '../utils/ComparisonBar2'
 
 export default class Surveys extends Component {
+
   state = {
-    fetchedSurveys: [],
     surveys: [],
     loaded: false,
-    ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+    ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
   };
 
   componentDidMount() {
     this.fetchSurveys();
-    //setTimeout(() => {this.setState({loaded: false})}, 2000)
   };
 
   fetchSurveys = () => {
@@ -28,7 +26,6 @@ export default class Surveys extends Component {
       //console.log("responseJson:", responseJson)
       this.setState({
         surveys: responseJson,
-        fetchedSurveys: responseJson,
         loaded: true
       });
     })
@@ -66,17 +63,6 @@ export default class Surveys extends Component {
     );
   };
 
-  onSearchTextChange(searchText) {
-    let searchTextLower = searchText.toLowerCase()
-    const newSurveys = [];
-    for (let survey of this.state.fetchedSurveys) {
-      if (survey.question.toLowerCase().includes(searchTextLower) || survey.tags.includes(searchTextLower)) {
-        newSurveys.push(survey)
-      }
-    }
-    this.setState({surveys: newSurveys});
-  };
-
   render() {
     if (!this.state.loaded) {
       return this.renderLoadingView();
@@ -89,11 +75,10 @@ export default class Surveys extends Component {
           leftButtonIconName='arrow-back'
           title="Surveys"
           showSearchIcon={true}
-          onSearchTextChange={this.onSearchTextChange.bind(this)}
         />
         <Content>
-          <ListView
-            dataSource={this.state.ds.cloneWithRows(this.state.surveys)}
+          <List
+            dataArray={this.state.surveys}
             renderRow={(survey) =>
               <ListItem thumbnail button onPress={this.onPressListItem} style={{ paddingRight: 16}}>
                 <Card>
@@ -113,13 +98,11 @@ export default class Surveys extends Component {
                       rightNumber={survey.count_right}
                       rightLabel={survey.option_right}
                       viewStyle={{height:18, width:300, flexDirection: 'row'}}
-                      loaded={this.state.loaded}
                     />
                   </Body>
                 </Card>
               </ListItem>
             }
-            enableEmptySections={true}
           />
         </Content>
       </Container>

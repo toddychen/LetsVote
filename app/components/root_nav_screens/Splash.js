@@ -6,6 +6,8 @@ import Mystyles from '../../../styles/Mystyles'
 import SmartHeader from '../utils/SmartHeader'
 import DataController from '../../../utils/DataController'
 
+import ComparisonBar from '../utils/ComparisonBar'
+
 export default class Splash extends Component {
   state = {
     arrowColor: 'gold',

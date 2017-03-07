@@ -142,11 +142,11 @@ export default class CardsPage extends Component {
             onSwipeLeft={this._onSwipeLeft}
           />
         </View>
-        <View style={{ paddingBottom: 30, flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{ paddingBottom: 80, flexDirection: 'row', justifyContent: 'center' }}>
           <Button
-            primary transparent
+            bordered primary
             onPress={this.onSkipButton}>
-            <Icon name="close-circle" style={{fontSize: 50, color: 'dodgerblue' }}/>
+            <Text style={{color: 'blue'}}>Skip</Text>
           </Button>
         </View>
       </Container>

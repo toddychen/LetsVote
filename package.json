@@ -11,6 +11,7 @@
     "react": "~15.4.0",
     "react-native": "0.41.2",
     "react-native-pathjs-charts": "0.0.26",
+    "react-native-progress-bar": "^0.1.2",
     "react-native-simple-toast": "0.0.5",
     "react-native-swipe-cards": "^0.1.0",
     "react-native-swipe-list-view": "^0.3.3",
